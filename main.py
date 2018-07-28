@@ -1,17 +1,22 @@
 import os
 import tornado.httpserver
 import tornado.ioloop
-import tornado.web
+from tornado.web import Application, url, RequestHandler
+
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("Hello world")
 
-def main():
-    application = tornado.web.Application([
-        (r"/", MainHandler),
+
+def make_app():
+    return Application([
+        url(r"/", MainHandler)
     ])
-    http_server = tornado.httpserver.HTTPServer(application)
+
+
+def main():
+    http_server = tornado.httpserver.HTTPServer(make_app())
     port = int(os.environ.get("PORT", 5000))
     http_server.listen(port)
     tornado.ioloop.IOLoop.instance().start()
