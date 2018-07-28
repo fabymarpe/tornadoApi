@@ -17,7 +17,6 @@ class Auth(RequestHandler):
 
     def post(self):
         data = json.loads(self.request.body)
-        print data
         if data['email'] == 'no-email@no-email.com' and data['password'] == \
                 '12345':
             user = {
