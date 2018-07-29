@@ -5,7 +5,7 @@ tornado==5.1
 
 # How to install
 1. Create project folder on local pc
-2. From the project folder to clone the project 'git clone https://github.com/fabymarpe/clientReact.git'
+2. From the project folder to clone the project 'git clone https://github.com/fabymarpe/tornadoApi.git'
 
 # How to run
 1. Create your virtualenv
