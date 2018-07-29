@@ -5,16 +5,17 @@ import tornado.ioloop
 from tornado.web import Application, url, RequestHandler
 
 
-class MainHandler(tornado.web.RequestHandler):
+class MainHandler(RequestHandler):
     def get(self):
         self.write("Hello world")
 
-
-class Auth(RequestHandler):
-    def set_default_headers(self):
+    def set_default_headers(self, *args, **kwargs):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        self.set_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+
+
+class Login(MainHandler):
 
     def post(self):
         data = json.loads(self.request.body)
@@ -35,11 +36,22 @@ class Auth(RequestHandler):
         self.write(response)
 
 
-class LoanDecision(RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+class Logout(MainHandler):
+
+    def post(self):
+        data = json.loads(self.request.body)
+        if data['email'] == 'no-email@no-email.com':
+            response = {
+                'code': 200,
+                'msg': 'Goodbay'
+            }
+        else:
+            response = {'code': 401,
+                        'msg': "User isn't login"}
+        self.write(response)
+
+
+class Loan(MainHandler):
 
     def post(self):
         data = json.loads(self.request.body)
@@ -58,8 +70,9 @@ class LoanDecision(RequestHandler):
 def make_app():
     return Application([
         url(r"/", MainHandler),
-        url(r"/login", Auth),
-        url(r"/loan", LoanDecision, name='loan')
+        url(r"/login", Login),
+        url(r"/logout", Logout),
+        url(r"/loan", Loan, name='loan')
     ])
 
 
